@@ -1,5 +1,7 @@
+use alloc::string::{String, ToString};
 use alloc::vec;
 use alloc::vec::Vec;
+use plonky2::util::serialization::{IoResult, Buffer, Read, Write};
 use core::marker::PhantomData;
 
 use plonky2::field::extension::Extendable;
@@ -12,6 +14,7 @@ use plonky2::plonk::circuit_builder::CircuitBuilder;
 use crate::gates::add_many_u32::U32AddManyGate;
 use crate::gates::arithmetic_u32::U32ArithmeticGate;
 use crate::gates::subtraction_u32::U32SubtractionGate;
+use crate::serialization::{WriteU32, ReadU32};
 use crate::witness::GeneratedValuesU32;
 
 #[derive(Clone, Copy, Debug)]
@@ -241,6 +244,23 @@ struct SplitToU32Generator<F: RichField + Extendable<D>, const D: usize> {
 impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
     for SplitToU32Generator<F, D>
 {
+    fn id(&self) -> String {
+        "SplitToU32Generator".to_string()
+    }
+
+    fn serialize(&self, dst: &mut Vec<u8>) -> IoResult<()> {
+        dst.write_target(self.x)?;
+        dst.write_target_u32(self.low)?;
+        dst.write_target_u32(self.high)
+    }
+
+    fn deserialize(src: &mut Buffer) -> IoResult<Self> {
+        let x = src.read_target()?;
+        let low = src.read_target_u32()?;
+        let high = src.read_target_u32()?;
+        Ok(Self { x, low, high, _phantom: PhantomData })
+    }
+
     fn dependencies(&self) -> Vec<Target> {
         vec![self.x]
     }
@@ -254,6 +274,7 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
         out_buffer.set_u32_target(self.low, low);
         out_buffer.set_u32_target(self.high, high);
     }
+
 }
 
 #[cfg(test)]
