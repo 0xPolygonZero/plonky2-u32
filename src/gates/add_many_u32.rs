@@ -92,7 +92,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Gate<F, D> for U32AddManyGate
     }
 
     fn serialize(&self, dst: &mut Vec<u8>) -> IoResult<()> {
-        dst.write_usize(self.num_addends);
+        dst.write_usize(self.num_addends)?;
         dst.write_usize(self.num_ops)
     }
 
