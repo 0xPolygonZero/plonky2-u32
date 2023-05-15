@@ -216,13 +216,13 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
     }
 
     fn serialize(&self, dst: &mut Vec<u8>) -> IoResult<()> {
-        dst.write_usize(self.row)?;
-        self.gate.serialize(dst)
+        self.gate.serialize(dst)?;
+        dst.write_usize(self.row)
     }
 
     fn deserialize(src: &mut Buffer) -> IoResult<Self> {
-        let row = src.read_usize()?;
         let gate = U32RangeCheckGate::deserialize(src)?;
+        let row = src.read_usize()?;
         Ok(Self { row, gate })
     }
 

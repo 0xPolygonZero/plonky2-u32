@@ -1,7 +1,7 @@
 use alloc::format;
 use alloc::string::{String, ToString};
 use alloc::vec::Vec;
-use plonky2::util::serialization::{IoResult, Buffer, Write, Read};
+use plonky2::util::serialization::{Buffer, IoResult, Read, Write};
 use core::marker::PhantomData;
 
 use itertools::unfold;

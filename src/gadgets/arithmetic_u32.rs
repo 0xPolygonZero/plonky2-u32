@@ -1,7 +1,7 @@
 use alloc::string::{String, ToString};
 use alloc::vec;
 use alloc::vec::Vec;
-use plonky2::util::serialization::{IoResult, Buffer, Read, Write};
+use plonky2::util::serialization::{Buffer, IoResult, Read, Write};
 use core::marker::PhantomData;
 
 use plonky2::field::extension::Extendable;
@@ -14,7 +14,7 @@ use plonky2::plonk::circuit_builder::CircuitBuilder;
 use crate::gates::add_many_u32::U32AddManyGate;
 use crate::gates::arithmetic_u32::U32ArithmeticGate;
 use crate::gates::subtraction_u32::U32SubtractionGate;
-use crate::serialization::{WriteU32, ReadU32};
+use crate::serialization::{ReadU32, WriteU32};
 use crate::witness::GeneratedValuesU32;
 
 #[derive(Clone, Copy, Debug)]
@@ -274,7 +274,6 @@ impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
         out_buffer.set_u32_target(self.low, low);
         out_buffer.set_u32_target(self.high, high);
     }
-
 }
 
 #[cfg(test)]
