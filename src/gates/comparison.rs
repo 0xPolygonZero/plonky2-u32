@@ -26,7 +26,7 @@ use plonky2::plonk::vars::{
 use plonky2::util::{bits_u64, ceil_div_usize};
 
 /// A gate for checking that one value is less than or equal to another.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct ComparisonGate<F: Field64 + Extendable<D>, const D: usize> {
     pub(crate) num_bits: usize,
     pub(crate) num_chunks: usize,
@@ -412,8 +412,8 @@ impl<F: RichField + Extendable<D>, const D: usize> PackedEvaluableBase<F, D>
     }
 }
 
-#[derive(Debug)]
-struct ComparisonGenerator<F: RichField + Extendable<D>, const D: usize> {
+#[derive(Debug, Default)]
+pub struct ComparisonGenerator<F: RichField + Extendable<D>, const D: usize> {
     row: usize,
     gate: ComparisonGate<F, D>,
 }
