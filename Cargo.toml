@@ -10,8 +10,8 @@ edition = "2021"
 anyhow = { version = "1.0.40", default-features = false }
 itertools = { version = "0.10.0", default-features = false }
 num = { version = "0.4", default-features = false }
-plonky2 = { git = "https://github.com/mir-protocol/plonky2.git" }
+plonky2 = "0.1.4"
 
 [dev-dependencies]
-plonky2 = { git = "https://github.com/mir-protocol/plonky2.git", default-features = false, features = ["gate_testing"] }
 rand = { version = "0.8.4", default-features = false, features = ["getrandom"] }
+plonky2 = "0.1.4"
