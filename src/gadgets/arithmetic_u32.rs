@@ -1,8 +1,9 @@
 use alloc::string::{String, ToString};
 use alloc::vec;
 use alloc::vec::Vec;
-use plonky2::util::serialization::{Buffer, IoResult, Read, Write};
 use core::marker::PhantomData;
+use plonky2::plonk::circuit_data::CommonCircuitData;
+use plonky2::util::serialization::{Buffer, IoResult, Read, Write};
 
 use plonky2::field::extension::Extendable;
 use plonky2::hash::hash_types::RichField;
@@ -241,24 +242,29 @@ struct SplitToU32Generator<F: RichField + Extendable<D>, const D: usize> {
     _phantom: PhantomData<F>,
 }
 
-impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F>
+impl<F: RichField + Extendable<D>, const D: usize> SimpleGenerator<F, D>
     for SplitToU32Generator<F, D>
 {
     fn id(&self) -> String {
         "SplitToU32Generator".to_string()
     }
 
-    fn serialize(&self, dst: &mut Vec<u8>) -> IoResult<()> {
+    fn serialize(&self, dst: &mut Vec<u8>, _common_data: &CommonCircuitData<F, D>) -> IoResult<()> {
         dst.write_target(self.x)?;
         dst.write_target_u32(self.low)?;
         dst.write_target_u32(self.high)
     }
 
-    fn deserialize(src: &mut Buffer) -> IoResult<Self> {
+    fn deserialize(src: &mut Buffer, _common_data: &CommonCircuitData<F, D>) -> IoResult<Self> {
         let x = src.read_target()?;
         let low = src.read_target_u32()?;
         let high = src.read_target_u32()?;
-        Ok(Self { x, low, high, _phantom: PhantomData })
+        Ok(Self {
+            x,
+            low,
+            high,
+            _phantom: PhantomData,
+        })
     }
 
     fn dependencies(&self) -> Vec<Target> {
