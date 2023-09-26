@@ -201,7 +201,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Gate<F, D> for U32Subtraction
     fn generators(&self, row: usize, _local_constants: &[F]) -> Vec<WitnessGeneratorRef<F, D>> {
         (0..self.num_ops)
             .map(|i| {
-                let g = WitnessGeneratorRef::new(
+                WitnessGeneratorRef::new(
                     U32SubtractionGenerator {
                         gate: *self,
                         row,
@@ -209,8 +209,7 @@ impl<F: RichField + Extendable<D>, const D: usize> Gate<F, D> for U32Subtraction
                         _phantom: PhantomData,
                     }
                     .adapter(),
-                );
-                g
+                )
             })
             .collect()
     }
